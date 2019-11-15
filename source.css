@@ -242,7 +242,7 @@ top: 5mm;
     font-size: 9pt;
 }
 .invoice {
-  top: 140mm;
+  top: 100mm;
   position: relative;
   width: 202.8mm;
   height: 101.6mm;
@@ -484,7 +484,7 @@ top: 5mm;
   position: absolute;
   left: 128.4mm;
   top: 66.1mm;
-  width: 30mm;
+  width: 40mm;
   height: 8.05mm;
   border-bottom: 2px solid #000000;
   border-right: 2px solid #000000;
@@ -519,7 +519,7 @@ top: 5mm;
 .payment--amount--label {
   position: absolute;
   top: 66.1mm;
-  left: 158.4mm;
+  left: 169.4mm;
   font-size: 8pt;
   padding: 0 0 0 2mm;
   padding-left: 1mm;

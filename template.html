@@ -5,8 +5,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.0.272/jspdf.debug.js"></script>
 
+<script src="datepicker.js"></script>
+
   <meta charset="UTF-8">
   <link rel="stylesheet" type="text/css" href="source.css">
+  <link rel="stylesheet" type="text/css" href="datepicker.css">
 </head>
 
 <div class="page">
@@ -24,7 +27,7 @@
   </div>
   <div class="faktura-details">
     Fakturanummer - <input type="text" placeholder="Faktura nummer"></input><br>
-    Förfallodatum - <input type="text" placeholder="Förfallodatum"></input><br>
+    Förfallodatum - <input type="text" placeholder="Förfallodatum" data-toggle="datepicker"></input><br>
     Referensnummer - <input type="text" placeholder="Referensnummer"></input><br>
     Betalningsvillkor - <input type="text" placeholder="Betalningsvillkor"></input><br>
     Vår referens - <input type="text" placeholder="Vår referens"></input><br>
@@ -173,14 +176,14 @@
   </div>
   <div class="sale-total">
       <div class="item-mom-head">Betala Euro</div>
-      <div class="item-total-head" id="betala-total"> 50 €</div>
+      <div class="item-total-head" id="betala-total"> 0 €</div>
   </div>
 
-  <div class="message-before">
+  <!--<div class="message-before">
     Obs! Vi använder tjänsten Cash-In Fakturering, och vi ber Er vänliga rikta er betalning till Cash-In Fakturerings konto FI08 2052 3800 0114 77.<br>
     Om Ni önskar flytta fakturans förfallodag, ta kontakt med Cash-In Fakturering: tel. 0207701560, service@cash-in.fi.<br>
     Syriern, Torggatan 9, 22100 MARIEHAMN , FO-nummer: 2976532-2
-  </div>
+  </div>-->
 
   <div class="invoice">
     <!-- <label class="invoice--label">
@@ -260,19 +263,19 @@
         <span>Ref. Nr. </span>
       </label>
       <span class="payment--reference">
-        12 34561
+        <input type="text"></input>
       </span>
       <label class="payment--due--label">
         Förf.dag
       </label>
       <span class="payment--due">
-        30.11.2010
+        <input type="text" data-toggle="datepicker"></input>
       </span>
       <label class="payment--amount--label">
         Euro
       </label>
-      <span class="payment--amount">
-        50,00
+      <span class="payment--amount" id="payment--amount">
+
       </span>
     </div>
     <div class="barcode">
@@ -281,17 +284,20 @@
 </div>
 
 <script type="text/javascript">
+
+$('[data-toggle="datepicker"]').datepicker();
     $("#btnPrint").click(function () {
-      
+
       $('select').replaceWith(function(){
         return '<span name="span-lable" class='+this.className+'>'+(this.value == 1 ? "No Tax" : "24% Mom")+'</span>'
       });
 
+       $("calculate").hide();
+       $("btnPrint").hide();
+
       $(':input').replaceWith(function(){
         return '<span class='+this.className+'>'+this.value+'</span>'
       });
-
-
 
       let doc = new jsPDF('p', 'pt', 'a4');
 
@@ -335,16 +341,16 @@
       var mom9 = $( "select#item9mom" ).val();
       var mom10 = $( "select#item10mom" ).val();
 
-      var item1Total = ((item1Count * item1pris) + (((item1Count * item1pris) * mom1)/100)).toFixed();
-      var item2Total = ((item2Count * item2pris) + (((item2Count * item2pris) * mom2)/100)).toFixed();
-      var item3Total = ((item3Count * item3pris) + (((item3Count * item3pris) * mom3)/100)).toFixed();
-      var item4Total = ((item4Count * item4pris) + (((item4Count * item4pris) * mom4)/100)).toFixed();
-      var item5Total = ((item5Count * item5pris) + (((item5Count * item5pris) * mom5)/100)).toFixed();
-      var item6Total = ((item6Count * item6pris) + (((item6Count * item6pris) * mom6)/100)).toFixed();
-      var item7Total = ((item7Count * item7pris) + (((item7Count * item7pris) * mom7)/100)).toFixed();
-      var item8Total = ((item8Count * item8pris) + (((item8Count * item8pris) * mom8)/100)).toFixed();
-      var item9Total = ((item9Count * item9pris) + (((item9Count * item9pris) * mom9)/100)).toFixed();
-      var item10Total = ((item10Count * item10pris) + (((item10Count * item10pris) * mom10)/100)).toFixed();
+      var item1Total = ((item1Count * item1pris) + (((item1Count * item1pris) * mom1)/100)).toFixed(2);
+      var item2Total = ((item2Count * item2pris) + (((item2Count * item2pris) * mom2)/100)).toFixed(2);
+      var item3Total = ((item3Count * item3pris) + (((item3Count * item3pris) * mom3)/100)).toFixed(2);
+      var item4Total = ((item4Count * item4pris) + (((item4Count * item4pris) * mom4)/100)).toFixed(2);
+      var item5Total = ((item5Count * item5pris) + (((item5Count * item5pris) * mom5)/100)).toFixed(2);
+      var item6Total = ((item6Count * item6pris) + (((item6Count * item6pris) * mom6)/100)).toFixed(2);
+      var item7Total = ((item7Count * item7pris) + (((item7Count * item7pris) * mom7)/100)).toFixed(2);
+      var item8Total = ((item8Count * item8pris) + (((item8Count * item8pris) * mom8)/100)).toFixed(2);
+      var item9Total = ((item9Count * item9pris) + (((item9Count * item9pris) * mom9)/100)).toFixed(2);
+      var item10Total = ((item10Count * item10pris) + (((item10Count * item10pris) * mom10)/100)).toFixed(2);
 
       $("#prod-total-1").val(item1Total);
       $("#prod-total-2").val(item2Total);
@@ -357,17 +363,18 @@
       $("#prod-total-9").val(item9Total);
       $("#prod-total-10").val(item10Total);
 
-      alert(parseInt(item1Total) + parseInt(item2Total) + parseInt(item3Total)
-              + parseInt(item4Total) + parseInt(item5Total) + parseInt(item6Total)
-              + parseInt(item7Total) + parseInt(item8Total) + parseInt(item9Total)
-              + parseInt(item10Total));
+      /*alert(parseFloat(item1Total) + parseFloat(item2Total) + parseFloat(item3Total)
+              + parseFloat(item4Total) + parseFloat(item5Total) + parseFloat(item6Total)
+              + parseFloat(item7Total) + parseFloat(item8Total) + parseFloat(item9Total)
+              + parseFloat(item10Total));*/
 
-      var betalaTotal = parseInt(item1Total) + parseInt(item2Total) + parseInt(item3Total)
-              + parseInt(item4Total) + parseInt(item5Total) + parseInt(item6Total)
-              + parseInt(item7Total) + parseInt(item8Total) + parseInt(item9Total)
-              + parseInt(item10Total);
+      var betalaTotal = parseFloat(item1Total) + parseFloat(item2Total) + parseFloat(item3Total)
+              + parseFloat(item4Total) + parseFloat(item5Total) + parseFloat(item6Total)
+              + parseFloat(item7Total) + parseFloat(item8Total) + parseFloat(item9Total)
+              + parseFloat(item10Total);
 
-      $("#betala-total").html(betalaTotal);
+      $("#betala-total").html(betalaTotal.toFixed(2));
+      $("#payment--amount").html(betalaTotal.toFixed(2)+"€");
 
 
 
